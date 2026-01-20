@@ -13,10 +13,12 @@ export class MobileConfiguratorHelpers {
   get priceSummaryButton(): Locator { return this.page.getByRole('button', { name: 'Preisgestaltung anzeigen' }) };
   get saveButton(): Locator { return this.page.locator('button:has([data-testid="svg-icon-save"])') };  
   get basketButton(): Locator { return this.page.locator('button:has([data-testid="svg-icon-basket"])') };
+  
   // Page Layout and Content
   get doublePageViewToggleButton(): Locator { return this.page.getByTestId('double-page-view-button') };
   get singlePageViewToggleButton(): Locator { return this.page.getByTestId('single-page-view-button') };
   get firstPageSpread(): Locator { return this.page.getByTestId('spread-view-box-content').nth(0) };  
+  
   // Footer Menu
   get mobileMenuBar(): Locator { return this.page.locator('div[role="menubar"][aria-label="bottom navigation mobile"]') };
   get fotosButton(): Locator { return this.page.locator('[role="menuitem"]').filter({ hasText: 'Fotos' }) };

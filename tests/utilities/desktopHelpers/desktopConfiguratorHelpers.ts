@@ -23,7 +23,6 @@ export class DesktopConfiguratorHelpers {
     });
   }
 
-
   /**
    * Waits for images to be assigned by checking for non-empty drop areas and triggering lazy loading
    * First tries without page reload, then with reload as fallback
