@@ -81,7 +81,6 @@ tests/images/
 
 > **Note:** No personal or real customer data is used.
 
-
 ## ▶️ Running the Tests
 
 **Run all tests:**

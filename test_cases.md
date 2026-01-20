@@ -1,5 +1,4 @@
-Given the Scenario, our testing goal and scope will be focused on ensuring that when a user switches from mobile to desktop, 
-only one thing really matters:
+Given the Scenario, our testing goal and scope will be focused on ensuring that when a user switches from mobile to desktop, only one thing really matters:
 
 "Does my work survive the switch and can I continue without friction?"
 
@@ -15,8 +14,7 @@ Everything else is a variation on this question so each cross-device test case s
 // Test Case 1: Core Flow: Mobile start => Desktop continue //
 
 1. User Scenario
-    A logged-in customer starts creating a photo book on mobile web, uploads photos, places at least one image on a page, 
-    leaves the session, and later resumes the same project on desktop web to continue editing.
+    A logged-in customer starts creating a photo book on mobile web, uploads photos, places at least one image on a page, leaves the session, and later resumes the same project on desktop web to continue editing.
 
 2. Preconditions & Test Data
     Devices
