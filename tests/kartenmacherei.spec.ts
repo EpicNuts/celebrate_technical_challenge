@@ -153,7 +153,6 @@ test.describe('Foto Book Cross-Device Experience', () => {
           expect(await desktopNavigation.getProjectsCount()).toBeGreaterThan(0);
           await desktopNavigation.resumeFirstProjectFromProjectlist();
           await desktopPage.waitForURL('**/configurator**', { timeout: 15000 });
-          // await desktopConfigurator.waitForImageCDNRequests(getAllTestImages().length);
         });
          
         await test.step('Desktop: Validate Cross-device User Data', async () => {          

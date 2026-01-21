@@ -47,6 +47,9 @@ export class MobileConfiguratorHelpers {
     console.log('Configurator is ready');
   }
 
+  /**
+   * Opens the configurator for cleanup operations
+   */
   async openConfiguratorForCleanup(): Promise<void> {
     await this.page.goto(URLS.photobook);
     // Select the "Hochformat" format and wait for filter to be applied

@@ -165,39 +165,38 @@ export class DesktopConfiguratorHelpers {
 
   /**
    * Validates that images are actually loaded and visible after scrolling
+   * Only checks canvas images (alt="previewImage"), not media library thumbnails
    */
   async validateImagesLoadedAfterScroll(expectedCount: number): Promise<boolean> {
-    console.log('Validating that images loaded correctly after scrolling...');
+    console.log('Validating that canvas images loaded correctly after scrolling...');
     
-    // Count actual celebrate.company images that are visible
-    const celebrateImages = this.page.locator('img[src*="images.celebrate.company"]');
-    const celebrateImageCount = await celebrateImages.count();
+    // Only count canvas images, not thumbnail images in media library
+    const canvasImages = this.page.locator('img[alt="previewImage"][data-critical-resource="true"]');
+    const canvasImageCount = await canvasImages.count();
     
-    console.log(`Found ${celebrateImageCount} images with celebrate.company URLs`);
+    console.log(`Found ${canvasImageCount} canvas images (expected: ${expectedCount})`);
     
-    if (celebrateImageCount >= expectedCount) {
-      console.log(`Found ${celebrateImageCount} loaded images (expected ${expectedCount*2})`);
-      
-      // Verify first few images are actually visible and loaded
-      const maxCheck = Math.min(celebrateImageCount, 3);
+    if (canvasImageCount >= expectedCount) {
+      // Verify first few canvas images are actually visible and loaded
+      const maxCheck = Math.min(canvasImageCount, expectedCount);
       for (let i = 0; i < maxCheck; i++) {
-        const img = celebrateImages.nth(i);
+        const img = canvasImages.nth(i);
         const isVisible = await img.isVisible();
         const naturalWidth = await img.evaluate((el: HTMLImageElement) => el.naturalWidth);
+        const isPending = await img.getAttribute('data-pending');
         
-        console.log(`Image ${i}: visible=${isVisible}, naturalWidth=${naturalWidth}`);
+        console.log(`Canvas image ${i}: visible=${isVisible}, naturalWidth=${naturalWidth}, pending=${isPending}`);
         
-        if (!isVisible || naturalWidth === 0) {
-          console.log(`✗ Image ${i} is not properly loaded`);
+        if (!isVisible || naturalWidth === 0 || isPending === 'true') {
+          console.log(`✗ Canvas image ${i} is not properly loaded`);
           return false;
         }
       }
 
-      console.log(`✓ All checked images are properly loaded and visible`);
-      
+      console.log(`✓ All ${maxCheck} canvas images are properly loaded and visible`);
       return true;
     } else {
-      console.log(`✗ Expected ${expectedCount*2} images, only found ${celebrateImageCount}`);
+      console.log(`✗ Expected ${expectedCount} canvas images, only found ${canvasImageCount}`);
       return false;
     }
   }
