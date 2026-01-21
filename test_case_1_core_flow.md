@@ -1,23 +1,23 @@
-# Test Case 1: Core Flow
+# Test Case 1: Core Flow - Explicit Save
 *Mobile start → Desktop continue*
 
 ---
 
-## 🎯 User Journey
+## Scenario
 
 **Customer starts photo book on mobile, saves explicitly, continues on desktop**
 
 **Why This Matters:**
-- Real user behavior pattern
-- High business impact if broken
+- Real user behavior pattern (save button)
+- High business impact if contract is broken
 - Clear validation points for automation
 
 ---
 
-## 📋 Setup Requirements
+## Setup Requirements
 
 **Devices:**
-- **Mobile:** Smartphone browser (Android Chrome, iOS Safari)
+- **Mobile:** Android Chrome (mobile web browser)
 - **Desktop:** Chrome (latest)
 
 **User Account:**
@@ -27,50 +27,46 @@
 - 3-5 dummy JPG images
 - Valid test user credentials
 
-**Assumptions:**
-- User explicitly saves the project
-
 ---
+## 📋 Test Steps
 
-## 📱 Mobile Phase
+### 📱 Mobile Phase
 
 | Step | User Action | Success Criteria |
 |------|-------------|------------------|
 | 1 | Open kartenmacherei.de | Configurator loads without UI issues |
-| 2 | Start new photo book | Enters configurator successfully |
-| 3 | Upload 3-5 photos | Images appear in media library |
-| 4 | Place image on page | Image renders on canvas |
-| 5 | **Save & close** | Project saved explicitly |
+| 2 | Login user | Successfully login test account |
+| 3 | Start new photo book | Enters configurator successfully |
+| 4 | Upload 3-5 photos | Images appear in media library |
+| 5 | Place image on page | Image renders on canvas |
+| 6 | **Save & close** | Project saved explicitly |
 
----
 
-## 🖥️ Desktop Phase
+### 🖥️ Desktop Phase
 
 | Step | User Action | Success Criteria |
 |------|-------------|------------------|
-| 6 | Login & open site | Sees existing projects |
-| 7 | Resume photo book | Correct project opens |
-| 8 | **Validate state** | • All photos present<br>• Layout intact<br>• Editing works |
-| 9 | Continue editing | Changes save successfully |
+| 7 | Login & open 'Wishlist' | See saved projects |
+| 8 | Resume photo book | Correct project opens |
+| 9 | **Validate state** | • All photos present<br>• Layout intact<br>• Editing works |
+| 10 | Continue editing | Changes save successfully |
 
 ---
 
-## 😨 Key Risks
+## Key Risks
 
 - **State Loss:** Project not saved between devices
 - **Media Loss:** Images missing after device switch
 - **Layout Breaks:** Viewport differences cause corruption  
-- **Wrong Project:** User resumes incorrect session
 - **Auth Issues:** Login state conflicts
+- **Wrong Project:** User resumes incorrect session
 
 ---
 
-## ⚙️ Implementation
-
-**Status:** ✅ **Fully Automated**
+## Implementation
 
 **Priority:** 🔴 **Highest**
 
-**Tools:** Playwright + TypeScript + Device Emulation
+**Status:** ✅ **Fully Automated**
 
-**Rationale:** Critical user flow with clear validation points
+**Approach:** Use Playwright context-switching to build User Journey. Separate out different device classes to prevent cluttered PoMs

@@ -59,10 +59,8 @@
 
 ## ⚙️ Implementation
 
-**Status:** 🟡 **Manual Testing**
-
 **Priority:** 🟡 **Medium**  
 
-**Rationale:** Important for power users, less critical than basic persistence
+**Status:** ✅ **Fully Automated**
 
-**Automation:** Possible but lower priority than core flows
+**Approach:** Use Playwright context-switching to build User Journey. Separate out different device classes to prevent cluttered PoMs.

@@ -63,7 +63,7 @@ export class DesktopConfiguratorHelpers {
       console.log(`Scrolling through ${spreadCount} spreads to trigger lazy loading...`);
       
       for (let i = 0; i < spreadCount; i++) {
-        console.log(`Scrolling to spread ${i}...`);
+        // console.log(`Scrolling to spread ${i}...`);
         await spreads.nth(i).scrollIntoViewIfNeeded();
         await this.page.waitForTimeout(1000); // Longer wait for each spread
         
@@ -176,7 +176,7 @@ export class DesktopConfiguratorHelpers {
     console.log(`Found ${celebrateImageCount} images with celebrate.company URLs`);
     
     if (celebrateImageCount >= expectedCount) {
-      console.log(`✓ Found ${celebrateImageCount} loaded images (expected ${expectedCount})`);
+      console.log(`Found ${celebrateImageCount} loaded images (expected ${expectedCount*2})`);
       
       // Verify first few images are actually visible and loaded
       const maxCheck = Math.min(celebrateImageCount, 3);
@@ -192,10 +192,12 @@ export class DesktopConfiguratorHelpers {
           return false;
         }
       }
+
+      console.log(`✓ All checked images are properly loaded and visible`);
       
       return true;
     } else {
-      console.log(`✗ Expected ${expectedCount} images, only found ${celebrateImageCount}`);
+      console.log(`✗ Expected ${expectedCount*2} images, only found ${celebrateImageCount}`);
       return false;
     }
   }

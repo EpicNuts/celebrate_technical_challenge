@@ -3,7 +3,7 @@
 
 ---
 
-## 🎯 Scenario
+## Scenario
 
 **Customer starts photo book, leaves without explicit save, desktop recovers state**
 
@@ -14,14 +14,10 @@
 
 ---
 
-## 📋 Setup Requirements
+## Setup Requirements
 
-**Devices:**
-- **Mobile:** Smartphone browser (Android Chrome, iOS Safari)  
-- **Desktop:** Chrome (latest)
-
-**User Account:**
-- Logged-in user (required for cross-device persistence)
+**Devices & User:**
+- Same as [Test Case 1](test_case_1_core_flow.md#-setup-requirements)
 
 **Test Data:**
 - 3-5 dummy JPG images
@@ -31,8 +27,9 @@
 - **No explicit save action** - tests auto-save mechanisms
 
 ---
+## 📋 Test Steps
 
-## 📱 Mobile Phase
+### 📱 Mobile Phase
 
 | Step | User Action | Expected Behavior |
 |------|-------------|-------------------|
@@ -41,9 +38,7 @@
 | 3 | Place one image | - |
 | 4 | **Close without saving** | • No data loss warnings<br>• Auto-save triggers |
 
----
-
-## 🖥️ Desktop Recovery
+### 🖥️ Desktop Recovery
 
 | Step | User Action | Success Criteria |
 |------|-------------|------------------|
@@ -51,7 +46,7 @@
 
 ---
 
-## 😨 Critical Risks
+## Key Risks
 
 - **Auto-save Failure:** Timing-dependent save mechanisms
 - **Partial Corruption:** Photos uploaded but layout lost
@@ -59,12 +54,12 @@
 
 ---
 
-## ⚙️ Implementation
-
-**Status:** 🟡 **Manual Testing** 
+## Implementation
 
 **Priority:** 🟠 **High**
 
+**Status:** 🟡 **Partially Automated** 
+
 **Complexity:** Auto-save timing dependencies make automation challenging
 
-**Approach:** Exploratory testing with various interruption scenarios
+**Approach:** (Manual) exploratory testing with various interruption scenarios (Phone calls, app switching etc.)

@@ -39,15 +39,16 @@ npx playwright show-report
 ## 📚 Documentation
 
 - **[Test Strategy & Cases](test_cases.md)** - Testing philosophy and detailed test case documentation
-- **[Test Case 1: Core Flow](test_case_1_core_flow.md)** - Primary automated test (mobile → desktop)
-- **[Test Case 2: Auto-save Recovery](test_case_2_interruption_recovery.md)** - Auto-save validation
+- **[Test Case 1: Core Flow - Explicit Save](test_case_1_core_flow.md)** - Primary automated test (mobile → desktop)
+- **[Test Case 2: Mobile Interruption, Desktop Recovery](test_case_2_interruption_recovery.md)** - Auto-save validation
 - **[Test Case 3: Multiple Projects](test_case_3_multiple_projects.md)** - Project selection validation
+- **[Next Steps & Scaling Up](test_cases_scaling_up.md)** - Roadmap for improvements and scaling
 
 ## 🏗️ Architecture
 
 **Technology Stack:**
 - [Playwright](https://playwright.dev/) with TypeScript
-- Device emulation for mobile/desktop testing
+- responsive mobile browser testing (NOT native app)
 - Helper classes for code organization
 
 **Project Structure:**
