@@ -32,19 +32,19 @@
 
 ### 📱 Mobile Phase
 
-| Step | User Action | Success Criteria |
+| Step | User Action | Expected Behavior |
 |------|-------------|------------------|
 | 1 | Open kartenmacherei.de | Configurator loads without UI issues |
 | 2 | Login user | Successfully login test account |
 | 3 | Start new photo book | Enters configurator successfully |
 | 4 | Upload 3-5 photos | Images appear in media library |
-| 5 | Place image on page | Image renders on canvas |
+| 5 | Place images on page | Images render on canvas |
 | 6 | **Save & close** | Project saved explicitly |
 
 
 ### 🖥️ Desktop Phase
 
-| Step | User Action | Success Criteria |
+| Step | User Action | Expected Behavior |
 |------|-------------|------------------|
 | 7 | Login & open 'Wishlist' | See saved projects |
 | 8 | Resume photo book | Correct project opens |

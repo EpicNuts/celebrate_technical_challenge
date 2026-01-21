@@ -32,19 +32,22 @@
 
 ### 📱 Mobile Phase
 
-| Step | User Action | Expected Result |
+| Step | User Action | Expected Behavior |
 |------|-------------|-----------------|
-| 1 | Start **new** photo book | Creates additional project |
-| 2 | Upload & place image | - |
-| 3 | Leave session | - |
+| 1 | Open kartenmacherei.de | Configurator loads without UI issues |
+| 2 | Login user | Successfully login test account |
+| 3 | Create **new** photo book | Creates additional project |
+| 4 | Upload 3-5 photos | Images added to media library |
+| 5 | Place Images on Page | Images render on Canvas |
+| 6 | Save Session|  - |
 
 ### 🖥️ Desktop Selection
 
-| Step | User Action | Success Criteria |
+| Step | User Action | Expected Behavior |
 |------|-------------|------------------|
-| 4 | Login to desktop | - |
-| 5 | **View 'wishlist' list** | Multiple projects visible |
-| 6 | Resume recent project | • Correct project opens<br>• Correct images/layout<br>• Other projects unchanged |
+| 7 | Login to desktop | Successfully login test account |
+| 8 | **View 'wishlist' list** | Multiple projects visible |
+| 9 | Resume most recent project | • Correct project opens<br>• Correct images/layout<br>• Other projects unchanged |
 
 ---
 

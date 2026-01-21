@@ -33,16 +33,18 @@
 
 | Step | User Action | Expected Behavior |
 |------|-------------|-------------------|
-| 1 | Start new photo book | - |
-| 2 | Upload several photos | - |
-| 3 | Place one image | - |
-| 4 | **Close without saving** | • No data loss warnings<br>• Auto-save triggers |
+| 1 | Open kartenmacherei.de | Configurator loads without UI issues |
+| 2 | Login user | Successfully login test account |
+| 3 | Start new photo book | Enters configurator successfully |
+| 4 | Upload 3-5 photos | Images appear in media library |
+| 5 | Place one image on page | Image renders on canvas |
+| 6 | **Close without saving** | • No data loss warnings<br>• Auto-save triggers |
 
 ### 🖥️ Desktop Recovery
 
-| Step | User Action | Success Criteria |
+| Step | User Action | Expected Behavior |
 |------|-------------|------------------|
-| 5 | Login & resume project | • Uploaded photos exist<br>• Layout matches mobile state |
+| 7 | Login & resume project | • Uploaded photos exist in media library<br>• Layout matches mobile state |
 
 ---
 
