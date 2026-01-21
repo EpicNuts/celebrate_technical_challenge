@@ -38,7 +38,7 @@
 | 2 | Upload & place image | - |
 | 3 | Leave session | - |
 
-## 🖥️ Desktop Selection
+### 🖥️ Desktop Selection
 
 | Step | User Action | Success Criteria |
 |------|-------------|------------------|
