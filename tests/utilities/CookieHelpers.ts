@@ -19,6 +19,7 @@ export class CookieHelpers {
       return true;
       
     } catch {  
+      
       console.log('Cookie banner not found or already dismissed');
       return false;
     }

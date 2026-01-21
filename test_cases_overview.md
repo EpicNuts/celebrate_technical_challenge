@@ -9,7 +9,7 @@ Given the scenario, our testing goal and scope will be focused on ensuring that 
 
 Working towards answering this, each cross-device test case should answer these core questions:
 
-1. What is the state of the users project when they leave the mobile browser?
+1. What is the state of the user's project when they leave the mobile browser?
 2. How fully does the desktop restore/resume this state? 
 
 ---

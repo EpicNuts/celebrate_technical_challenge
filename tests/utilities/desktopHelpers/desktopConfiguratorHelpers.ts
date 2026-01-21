@@ -1,26 +1,20 @@
 import { Page, Locator, Response } from '@playwright/test';
+import { BaseConfiguratorHelpers } from '../baseConfiguratorHelpers';
 
-export class DesktopConfiguratorHelpers {
-  constructor(private page: Page) {}
+export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
+  constructor(page: Page) {
+    super(page);
+  }
 
   // Element locators as static getters
   get uploadedPhotoThumbnails(): Locator { return this.page.getByRole('button', { name: 'Foto platzieren' }) };
   get spreadViewBoxes(): Locator { return this.page.locator('[data-testid="spread-view-box-content"]') }; 
-  get clickableImageAreas(): Locator { return this.spreadViewBoxes.locator('button[aria-label*="Foto"]') };
-  get imageCanvases(): Locator { return this.spreadViewBoxes.locator('canvas') };
 
   // Elements that indicate an empty drop area (with "add image" icon)
   get emptyDropAreas(): Locator { 
     return this.spreadViewBoxes.locator('[data-testid="spread-drop-area"]').filter({ 
       has: this.page.locator('svg[data-testid="svg-icon-addImageElement"]') 
     }); 
-  }
-
-  // Elements that indicate an image has been assigned (not empty drop areas)
-  get assignedImageContainers(): Locator {
-    return this.spreadViewBoxes.locator('[data-testid="spread-drop-area"]').filter({ 
-      hasNot: this.page.locator('svg[data-testid="svg-icon-addImageElement"]') 
-    });
   }
 
   /**
@@ -104,49 +98,6 @@ export class DesktopConfiguratorHelpers {
     } catch (error) {
       console.log(`No uploaded photos found or error: ${error}`);
       return 0;
-    }
-  }
-
-  /**
-   * Waits for image CDN requests to complete
-   * Monitors network traffic to images.celebrate.company to ensure images are fully loaded
-   */
-  async waitForImageCDNRequests(expectedImageCount: number, timeoutMs: number = 30000): Promise<void> {
-    console.log(`Waiting for ${expectedImageCount} image CDN requests to complete...`);
-    
-    const imageResponses: string[] = [];
-    
-    // Listen for responses from the image CDN
-    const responseHandler = (response: Response) => {
-      const url = response.url();
-      if (url.includes('images.celebrate.company') && response.status() === 200) {
-        console.log(`✓ Image loaded: ${url.split('/').pop()}`);
-        imageResponses.push(url);
-      }
-    };
-    
-    this.page.on('response', responseHandler);
-    
-    try {
-      // Wait for the expected number of image responses
-      await this.page.waitForFunction(
-        (count) => {
-          const imageElements = document.querySelectorAll('img[src*="images.celebrate.company"]');
-          return imageElements.length >= count;
-        },
-        expectedImageCount,
-        { timeout: timeoutMs }
-      );
-      
-      // Additional wait for network stability
-      await this.page.waitForLoadState('networkidle');
-      
-      console.log(`✓ All ${expectedImageCount} images loaded from CDN`);
-      
-    } catch (error) {
-      console.log(`Warning: Timeout waiting for image CDN requests: ${error}`);
-    } finally {
-      this.page.off('response', responseHandler);
     }
   }
 

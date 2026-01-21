@@ -1,35 +1,21 @@
-import { Page, Locator } from '@playwright/test';
+import { Page } from '@playwright/test';
+import { BaseNavigationHelpers } from '../baseNavigationHelpers';
 
-export class DesktopNavigationHelpers {
-  constructor(private page: Page) {}
+export class DesktopNavigationHelpers extends BaseNavigationHelpers {
+  constructor(page: Page) {
+    super(page);
+  }
     
-  // Account/Login section
-  get accountLink(): Locator { return this.page.locator('a.popup-login-open.link-customer-account') };
-  get accountDropdown(): Locator { return this.page.locator('.header-popup.account-popup.js-account-dropdown-menu') };  
-  get accountLoginPopup(): Locator { return this.page.locator('.header-popup.account-login.js-account-login') };
-  get customerNameElement(): Locator { return this.page.locator('.customer-name.js-customer-name#customer-name') };
-  
   /**
    * Hovers over the account link to show the account dropdown or login form
    */
   async openAccountMenu(): Promise<void> {
-    await this.accountLink.waitFor({ state: 'visible', timeout: 5000 });
-    await this.accountLink.hover();
-    await this.accountLoginPopup.waitFor({ state: 'visible', timeout: 3000 })
+    const accountLink = this.page.locator('a.popup-login-open.link-customer-account');
+    await accountLink.waitFor({ state: 'visible', timeout: 5000 });
+    await accountLink.hover();
+    await this.page.locator('.header-popup.account-login.js-account-login').waitFor({ state: 'visible', timeout: 3000 })
     
     console.log('Account menu opened');
-  }
-
-  // Projects methods
-  /**
-   * Navigates to the full wishlist page
-   */
-  async goToProjectsPage(): Promise<void> {
-    // Navigate directly to wishlist page instead of using hover popup
-    await this.page.goto('https://www.kartenmacherei.de/wishlist/', { timeout: 10000 });
-    await this.page.waitForLoadState('networkidle');
-    
-    console.log('Navigated to wishlist page');
   }
 
   /**

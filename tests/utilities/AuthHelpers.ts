@@ -57,7 +57,7 @@ export class AuthHelpers {
         await this.page.fill('#login-email-flyout', email);
         await this.page.fill('#login-password-flyout', password);
         await this.page.click('input[type="submit"][value="Anmelden"]');
-        await this.desktopNav.accountLoginPopup.waitFor({ state: 'hidden', timeout: 10000 });
+        await this.page.locator('.header-popup.account-login.js-account-login').waitFor({ state: 'hidden', timeout: 10000 });
         
         console.log('Desktop login completed successfully');
     }

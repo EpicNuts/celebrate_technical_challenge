@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint 'tests/**/*.ts'"
+    "lint": "eslint 'tests/**/*.ts'",
+    "test": "playwright test"
   },
   "repository": {
     "type": "git",

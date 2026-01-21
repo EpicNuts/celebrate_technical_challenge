@@ -1,12 +1,15 @@
 import { Page, Locator } from '@playwright/test';
+import { BaseConfiguratorHelpers } from '../baseConfiguratorHelpers';
 import { URLS } from '../testData';
 
 /**
  * Helper class for interacting with the kartenmacherei configurator interface
  * Provides reusable methods for common configurator operations without full Page Object Model
 */
-export class MobileConfiguratorHelpers {
-  constructor(private page: Page) {}
+export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
+  constructor(page: Page) {
+    super(page);
+  }
 
   // Top Menu
   get closeConfiguratorButton(): Locator { return this.page.locator('button:has([data-testid="svg-icon-cross"])') };
@@ -24,10 +27,36 @@ export class MobileConfiguratorHelpers {
   get fotosButton(): Locator { return this.page.locator('[role="menuitem"]').filter({ hasText: 'Fotos' }) };
   get layoutButton(): Locator { return this.page.locator('[role="menuitem"]').filter({ hasText: 'Layout' }) };
   
+  get fotoThumbnails(): Locator { return this.page.locator('button[aria-label="Foto platzieren"]') };
+  get draggableFotoThumbnails(): Locator { return this.page.locator('div[data-testid="drag-item"]') };
+   
   // Foto Upload Panel
-  get fotoUploadPanel(): Locator { return this.page.locator('[role="dialog"]').filter({ hasText: 'Fotos hochladen' }) };
+  get fotoUploadButton(): Locator { return this.page.locator('button').filter({ hasText: 'Fotos hochladen' }) };
+  get fotoUploadPanel(): Locator { 
+    return this.page.locator('[role="dialog"]')
+      .filter({ hasText: 'Fotos hochladen' })
+  }
   get fotoUploadClosePanelButton(): Locator { return this.fotoUploadPanel.locator('button[aria-label="close slider menu"]') };
 
+  get deleteAllFotosButton(): Locator { return this.page.locator('button[aria-label="Alle Fotos löschen"]') };
+  get deleteAllFotosConfirmButton(): Locator { 
+    return this.page.locator('[role="dialog"]')
+      .getByRole('button', { name: 'Alle Fotos löschen' });
+  }
+  
+  get uploadIndicator(): Locator { 
+    return this.page.locator('div')
+      .filter({ hasText: 'Fotos werden hochgeladen.' }).nth(1);
+  }
+  
+  get collapseInfoMessageButton(): Locator { return this.page.getByRole('button', { name: 'Collapse info message' }) };
+ 
+  get loadingMessage(): Locator { return this.page.locator('p').filter({ hasText: 'Wir speichern Ihr Design.' }); }
+  get saveConfirmation(): Locator { 
+    return this.page.locator('#modal-saved-to-wishlist-success-title')
+      .filter({ hasText: 'Ihr Entwurf wurde auf dem Merkzettel gespeichert.' }); 
+  }
+  
   /**
    * Waits for the configurator to be fully loaded
    * @returns Promise that resolves when configurator is ready
@@ -44,6 +73,7 @@ export class MobileConfiguratorHelpers {
       this.fotosButton.waitFor({ state: 'visible', timeout: 15000 }),
       this.layoutButton.waitFor({ state: 'visible', timeout: 15000 })
     ]);
+
     console.log('Configurator is ready');
   }
 
@@ -60,9 +90,7 @@ export class MobileConfiguratorHelpers {
     await this.page.waitForURL(/fotobuch-softcover-memories/i, { timeout: 10000 });
     await this.page.locator('[data-testid="open-configurator"]').click();
   }
-  
-  get fotoUploadButton(): Locator { return this.page.locator('button').filter({ hasText: 'Fotos hochladen' }) };
-
+ 
   /**
    * Opens the fotos panel in the configurator footer
    * @returns Promise that resolves when the fotos panel is expanded
@@ -78,9 +106,10 @@ export class MobileConfiguratorHelpers {
       console.log('Opened fotos panel');
     }
   }
-
-  get collapseInfoMessageButton() { return this.page.getByRole('button', { name: 'Collapse info message' }) };
-  
+ 
+  /** 
+   * Minimizes the Smart Layouts prompt if it is present 
+   **/
   async minimizeSmartLayoutsPromptIfPresent(): Promise<void> {
     try {
       await this.collapseInfoMessageButton.waitFor({ state: 'visible', timeout: 3000 });
@@ -107,8 +136,6 @@ export class MobileConfiguratorHelpers {
     }
   }
 
-  get uploadIndicator(): Locator { return this.page.locator('div').filter({ hasText: 'Fotos werden hochgeladen.' }).nth(1) };
-
   /**
    * Uploads fotos through the configurator foto upload interface
    * @param imagePaths Array of test image paths (use getAllTestImages() from testData)
@@ -128,9 +155,6 @@ export class MobileConfiguratorHelpers {
     await this.uploadIndicator.waitFor({ state: 'hidden', timeout: 30000 });
   }
 
-  get fotoThumbnails() { return this.page.locator('button[aria-label="Foto platzieren"]') };
-  get draggableFotoThumbnails() { return this.page.locator('div[data-testid="drag-item"]') };
-  
   /**
    * Gets the count of uploaded fotos in the media library
    * @returns Promise that resolves to the number of uploaded fotos
@@ -145,9 +169,6 @@ export class MobileConfiguratorHelpers {
     }
     return await this.fotoThumbnails.count();
   }
-
-  get deleteAllFotosButton(): Locator { return this.page.locator('button[aria-label="Alle Fotos löschen"]') };
-  get deleteAllFotosConfirmButton(): Locator { return this.page.locator('[role="dialog"]').getByRole('button', { name: 'Alle Fotos löschen' }) };
 
   /**
    * Deletes all uploaded fotos from the media library
@@ -177,10 +198,10 @@ export class MobileConfiguratorHelpers {
    */
   async placeFotosAutomatically(): Promise<void> {   
     // Wait for fotos to be uploaded first
-    const fotoThumbnails = this.page.locator('button[aria-label="Foto platzieren"]');
-    await fotoThumbnails.first().waitFor({ state: 'visible', timeout: 10000 });
+
+    await this.fotoThumbnails.first().waitFor({ state: 'visible', timeout: 10000 });
     
-    const thumbnailCount = await fotoThumbnails.count();
+    const thumbnailCount = await this.fotoThumbnails.count();
     if (thumbnailCount === 0) {
       throw new Error('No foto thumbnails found to place');
     }
@@ -198,9 +219,6 @@ export class MobileConfiguratorHelpers {
     await successMessage.waitFor({ state: 'visible', timeout: 10000 });
   }
 
-  get loadingMessage() { return this.page.locator('p').filter({ hasText: 'Wir speichern Ihr Design.' }); }
-  get saveConfirmation() { return this.page.locator('#modal-saved-to-wishlist-success-title').filter({ hasText: 'Ihr Entwurf wurde auf dem Merkzettel gespeichert.' }); }
-  
   /**
    * Saves the current project in the configurator
    */
