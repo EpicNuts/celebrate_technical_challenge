@@ -36,6 +36,12 @@ npx playwright test kartenmacherei
 npx playwright show-report
 ```
 
+### Linting
+```bash
+# Keep it clean
+npm run lint
+```
+
 ## 📚 Documentation
 
 - **[Test Strategy & Cases](test_cases_overview.md)** - Testing philosophy and detailed test case documentation
@@ -62,4 +68,3 @@ tests/
     └── mobileHelpers/
     └── desktopHelpers/
 ```
-
