@@ -38,7 +38,7 @@ npx playwright show-report
 
 ## 📚 Documentation
 
-- **[Test Strategy & Cases](test_cases.md)** - Testing philosophy and detailed test case documentation
+- **[Test Strategy & Cases](test_cases_overview.md)** - Testing philosophy and detailed test case documentation
 - **[Test Case 1: Core Flow - Explicit Save](test_case_1_core_flow.md)** - Primary automated test (mobile → desktop)
 - **[Test Case 2: Mobile Interruption, Desktop Recovery](test_case_2_interruption_recovery.md)** - Auto-save validation
 - **[Test Case 3: Multiple Projects](test_case_3_multiple_projects.md)** - Project selection validation
