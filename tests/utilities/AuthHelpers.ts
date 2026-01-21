@@ -23,8 +23,8 @@ export class AuthHelpers {
     
     // Test user credentials (keep as static since they're shared)
     static readonly TEST_USER: TestUser = {
-        email: process.env.TEST_EMAIL!,
-        password: process.env.TEST_PASSWORD!
+        email: process.env.TEST_USER_EMAIL!,
+        password: process.env.TEST_USER_PASSWORD!
     } as const;
 
     constructor(page: Page) {
