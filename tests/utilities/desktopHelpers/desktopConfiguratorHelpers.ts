@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, Response } from '@playwright/test';
 
 export class DesktopConfiguratorHelpers {
   constructor(private page: Page) {}
@@ -31,7 +31,7 @@ export class DesktopConfiguratorHelpers {
     console.log(`Waiting for ${expectedCount} images to be assigned...`);
     
     // First attempt: try triggering lazy loading without page reload
-    const initialSuccess = await this.attemptImageLoadingWithoutReload(expectedCount, timeoutMs / 2);
+    const initialSuccess = await this.attemptImageLoadingWithoutReload(expectedCount);
     
     if (initialSuccess) {
       console.log('✓ Images loaded successfully without page reload');
@@ -43,9 +43,9 @@ export class DesktopConfiguratorHelpers {
     // Fallback: reload page and try again
     await this.page.reload();
     await this.page.waitForLoadState('networkidle');
-    await this.spreadViewBoxes.first().waitFor({ state: 'visible', timeout: 5000 });
+    await this.spreadViewBoxes.first().waitFor({ state: 'visible', timeout: timeoutMs });
     
-    const reloadSuccess = await this.attemptImageLoadingWithoutReload(expectedCount, timeoutMs / 2);
+    const reloadSuccess = await this.attemptImageLoadingWithoutReload(expectedCount);
     
     if (!reloadSuccess) {
       console.log('Warning: Images still not loading after page reload');
@@ -55,7 +55,7 @@ export class DesktopConfiguratorHelpers {
   /**
    * Attempts to load images through scrolling and interaction without page reload
    */
-  private async attemptImageLoadingWithoutReload(expectedCount: number, timeoutMs: number): Promise<boolean> {
+  private async attemptImageLoadingWithoutReload(expectedCount: number): Promise<boolean> {
     try {
       // 1. Scroll through all spreads to trigger lazy loading
       const spreads = this.spreadViewBoxes;
@@ -68,7 +68,7 @@ export class DesktopConfiguratorHelpers {
         await this.page.waitForTimeout(1000); // Longer wait for each spread
         
         // Check if images started loading after this scroll
-        if (i === 3) { // You mentioned nth(3) is where images start loading
+        if (i === 3) { 
           console.log('Reached spread 3 - checking if images started loading...');
           await this.page.waitForTimeout(2000); // Extra wait at the trigger point
           
@@ -117,7 +117,7 @@ export class DesktopConfiguratorHelpers {
     const imageResponses: string[] = [];
     
     // Listen for responses from the image CDN
-    const responseHandler = (response: any) => {
+    const responseHandler = (response: Response) => {
       const url = response.url();
       if (url.includes('images.celebrate.company') && response.status() === 200) {
         console.log(`✓ Image loaded: ${url.split('/').pop()}`);

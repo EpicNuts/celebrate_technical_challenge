@@ -42,7 +42,7 @@ const DEVICE_COMBINATIONS = [
 test.describe('Foto Book Cross-Device Experience', () => {
   
   /** Cleanup after each test to remove uploaded photos and delete created projects **/
-  test.afterEach(async ({ browser, page }) => {
+  test.afterEach(async ({ browser }) => {
 
     console.log('Cleanup: Starting cleanup after test...');
     
