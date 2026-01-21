@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { BaseNavigationHelpers } from '../baseNavigationHelpers';
+import { BaseNavigationHelpers } from '../BaseNavigationHelpers';
 
 export class MobileNavigationHelpers extends BaseNavigationHelpers {
   constructor(page: Page) {

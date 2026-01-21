@@ -155,7 +155,7 @@ test.describe('Foto Book Cross-Device Experience', () => {
 
     console.log('Cleanup: Starting cleanup after test...');
     
-    const mobileContext = await browser.newContext(devices['Pixel 5']);
+    const mobileContext = await browser.newContext(DEVICE_COMBINATIONS[0].mobile);
     const mobilePage = await mobileContext.newPage();
 
     const mobileAuth = new AuthHelpers(mobilePage);
@@ -163,7 +163,10 @@ test.describe('Foto Book Cross-Device Experience', () => {
     
     await mobilePage.goto(URLS.homepage);
     await CookieHelpers.dismissCookieBanner(mobilePage);
-    await mobileAuth.loginUserMobile(AuthHelpers.TEST_USER.email, AuthHelpers.TEST_USER.password);
+    await mobileAuth.loginUserMobile(
+      AuthHelpers.TEST_USER.email, 
+      AuthHelpers.TEST_USER.password
+    );
     await mobileConfigurator.openConfiguratorForCleanup();
     await mobileConfigurator.openFotosPanel();
     

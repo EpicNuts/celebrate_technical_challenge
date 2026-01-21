@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { BaseNavigationHelpers } from '../baseNavigationHelpers';
+import { BaseNavigationHelpers } from '../BaseNavigationHelpers';
 
 export class DesktopNavigationHelpers extends BaseNavigationHelpers {
   constructor(page: Page) {

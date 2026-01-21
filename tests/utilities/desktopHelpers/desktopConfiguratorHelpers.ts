@@ -1,5 +1,5 @@
-import { Page, Locator, Response } from '@playwright/test';
-import { BaseConfiguratorHelpers } from '../baseConfiguratorHelpers';
+import { Page, Locator } from '@playwright/test';
+import { BaseConfiguratorHelpers } from '../BaseConfiguratorHelpers';
 
 export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
   constructor(page: Page) {
@@ -9,10 +9,10 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
   // Element locators as static getters
   get uploadedPhotoThumbnails(): Locator { return this.page.getByRole('button', { name: 'Foto platzieren' }) };
   get spreadViewBoxes(): Locator { return this.page.locator('[data-testid="spread-view-box-content"]') }; 
-
+  get spreadDropAreas(): Locator { return this.spreadViewBoxes.locator('[data-testid="spread-drop-area"]') };
   // Elements that indicate an empty drop area (with "add image" icon)
   get emptyDropAreas(): Locator { 
-    return this.spreadViewBoxes.locator('[data-testid="spread-drop-area"]').filter({ 
+    return this.spreadDropAreas.filter({ 
       has: this.page.locator('svg[data-testid="svg-icon-addImageElement"]') 
     }); 
   }
@@ -23,7 +23,6 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
    */
   async waitForImagesAssigned(expectedCount: number, timeoutMs: number = 30000): Promise<void> {
     console.log(`Waiting for ${expectedCount} images to be assigned...`);
-    
     // First attempt: try triggering lazy loading without page reload
     const initialSuccess = await this.attemptImageLoadingWithoutReload(expectedCount);
     
@@ -33,7 +32,6 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
     }
     
     console.log('Initial attempt failed, trying with page reload...');
-    
     // Fallback: reload page and try again
     await this.page.reload();
     await this.page.waitForLoadState('networkidle');
@@ -73,14 +71,13 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
       
       // Check if we have the expected number of assigned areas
       const emptyAreas = await this.emptyDropAreas.count();
-      const totalDropAreas = await this.spreadViewBoxes.locator('[data-testid="spread-drop-area"]').count();
+      const totalDropAreas = await this.spreadDropAreas.count();
       const assignedAreas = totalDropAreas - emptyAreas;
       
       console.log(`Found ${assignedAreas} assigned areas out of ${totalDropAreas} total (expected: ${expectedCount})`);
-      
       return assignedAreas >= expectedCount;
-      
     } catch (error) {
+      
       console.log(`Error during image loading attempt: ${error}`);
       return false;
     }
@@ -93,9 +90,11 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
     try {
       await this.uploadedPhotoThumbnails.first().waitFor({ state: 'visible', timeout: 5000 });
       const count = await this.uploadedPhotoThumbnails.count();
+
       console.log(`Found ${count} uploaded photos in gallery`);
       return count;
     } catch (error) {
+      
       console.log(`No uploaded photos found or error: ${error}`);
       return 0;
     }
@@ -107,7 +106,7 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
   async getAssignedImageCount(): Promise<number> {    
     // Count assigned areas (drop areas without the "add image" icon)
     const emptyCount = await this.emptyDropAreas.count();
-    const totalDropAreas = await this.spreadViewBoxes.locator('[data-testid="spread-drop-area"]').count();
+    const totalDropAreas = await this.spreadDropAreas.count();
     const assignedCount = totalDropAreas - emptyCount;
     
     console.log(`Found ${assignedCount} assigned images (${totalDropAreas} total areas - ${emptyCount} empty areas)`);
@@ -119,14 +118,13 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
    * Only checks canvas images (alt="previewImage"), not media library thumbnails
    */
   async validateImagesLoadedAfterScroll(expectedCount: number): Promise<boolean> {
+
     console.log('Validating that canvas images loaded correctly after scrolling...');
-    
     // Only count canvas images, not thumbnail images in media library
     const canvasImages = this.page.locator('img[alt="previewImage"][data-critical-resource="true"]');
     const canvasImageCount = await canvasImages.count();
     
     console.log(`Found ${canvasImageCount} canvas images (expected: ${expectedCount})`);
-    
     if (canvasImageCount >= expectedCount) {
       // Verify first few canvas images are actually visible and loaded
       const maxCheck = Math.min(canvasImageCount, expectedCount);
@@ -136,8 +134,7 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
         const naturalWidth = await img.evaluate((el: HTMLImageElement) => el.naturalWidth);
         const isPending = await img.getAttribute('data-pending');
         
-        console.log(`Canvas image ${i}: visible=${isVisible}, naturalWidth=${naturalWidth}, pending=${isPending}`);
-        
+        console.log(`Canvas image ${i}: visible=${isVisible}, naturalWidth=${naturalWidth}, pending=${isPending}`);   
         if (!isVisible || naturalWidth === 0 || isPending === 'true') {
           console.log(`✗ Canvas image ${i} is not properly loaded`);
           return false;
@@ -147,6 +144,7 @@ export class DesktopConfiguratorHelpers extends BaseConfiguratorHelpers {
       console.log(`✓ All ${maxCheck} canvas images are properly loaded and visible`);
       return true;
     } else {
+
       console.log(`✗ Expected ${expectedCount} canvas images, only found ${canvasImageCount}`);
       return false;
     }

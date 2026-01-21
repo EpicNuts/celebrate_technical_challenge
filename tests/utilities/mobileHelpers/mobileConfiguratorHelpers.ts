@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { BaseConfiguratorHelpers } from '../baseConfiguratorHelpers';
+import { BaseConfiguratorHelpers } from '../BaseConfiguratorHelpers';
 import { URLS } from '../testData';
 
 /**
@@ -76,20 +76,6 @@ export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
 
     console.log('Configurator is ready');
   }
-
-  /**
-   * Opens the configurator for cleanup operations
-   */
-  async openConfiguratorForCleanup(): Promise<void> {
-    await this.page.goto(URLS.photobook);
-    // Select the "Hochformat" format and wait for filter to be applied
-    await this.page.getByRole('link', { name: 'Hochformat' }).click();
-    await this.page.locator('.selected-filter-option[data-filter-value="F570"]').waitFor({ state: 'visible', timeout: 5000 });
-    // Select the specific product "Fotobuch Softcover Memories" and open configurator
-    await this.page.getByRole('link', { name: /Fotobuch Softcover Memories/i }).click();
-    await this.page.waitForURL(/fotobuch-softcover-memories/i, { timeout: 10000 });
-    await this.page.locator('[data-testid="open-configurator"]').click();
-  }
  
   /**
    * Opens the fotos panel in the configurator footer
@@ -109,7 +95,7 @@ export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
  
   /** 
    * Minimizes the Smart Layouts prompt if it is present 
-   **/
+   */
   async minimizeSmartLayoutsPromptIfPresent(): Promise<void> {
     try {
       await this.collapseInfoMessageButton.waitFor({ state: 'visible', timeout: 3000 });
@@ -144,7 +130,6 @@ export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
   async uploadFotos(imagePaths: readonly string[]): Promise<void> {
     // Ensure fotos panel is open
     await this.openFotosPanel();
-
     // Trigger file chooser and set files
     const fileChooserPromise = this.page.waitForEvent('filechooser');
     await this.fotoUploadButton.click();
@@ -198,24 +183,22 @@ export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
    */
   async placeFotosAutomatically(): Promise<void> {   
     // Wait for fotos to be uploaded first
-
     await this.fotoThumbnails.first().waitFor({ state: 'visible', timeout: 10000 });
     
     const thumbnailCount = await this.fotoThumbnails.count();
     if (thumbnailCount === 0) {
       throw new Error('No foto thumbnails found to place');
     }
-        
+    console.log(`Found ${thumbnailCount} foto thumbnails, proceeding with auto-fill`);
     const autoFillButton = this.page.getByRole('button', { name: 'Platziere Fotos automatisch' });
     await autoFillButton.waitFor({ state: 'visible', timeout: 15000 });
     await autoFillButton.click();
-    
     const confirmButton = this.page.getByRole('button', { name: 'Seiten automatisch befüllen' });
     await confirmButton.waitFor({ state: 'visible', timeout: 5000 });    
     await confirmButton.click();
-    
     // Wait for the success message to confirm auto-fill completed
-    const successMessage = this.page.locator('div').filter({ hasText: 'Super! Alle Fotos konnten' }).first();
+    const successMessage = this.page.locator('div').filter({ 
+      hasText: 'Super! Alle Fotos konnten' }).first();
     await successMessage.waitFor({ state: 'visible', timeout: 10000 });
   }
 
@@ -225,9 +208,7 @@ export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
   async saveProject(): Promise<void> {
     await this.saveButton.waitFor({ state: 'visible', timeout: 10000 });
     await this.saveButton.click();
-    
     console.log('Save button clicked, waiting for save completion...');
-    
     try {
       await Promise.race([
         // Option 1: Loading message appears and disappears
@@ -240,7 +221,6 @@ export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
     }    
     // Final wait for save confirmation
     await this.saveConfirmation.waitFor({ state: 'visible', timeout: 20000 });
-    
     console.log('Project saved successfully');
   }
   
@@ -252,5 +232,15 @@ export class MobileConfiguratorHelpers extends BaseConfiguratorHelpers {
     console.log('Loading message appeared, waiting for it to disappear...');
     await this.loadingMessage.waitFor({ state: 'hidden', timeout: 30000 });
     console.log('Loading message disappeared');
-  } 
+  }
+
+  /**
+   * Opens the configurator for cleanup operations
+   */
+  async openConfiguratorForCleanup(): Promise<void> {
+    await this.page.goto(URLS.photobook);
+    await this.selectPortraitFormat();
+    await this.openSoftcoverMemoriesConfigurator();
+    await this.waitForConfiguratorReady();
+  }
 }

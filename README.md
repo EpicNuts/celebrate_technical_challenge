@@ -23,6 +23,10 @@ export TEST_USER_PASSWORD="yourpassword"
 
 ### Running Tests
 ```bash
+npm run test
+```
+or
+```bash
 # Run all tests
 npx playwright test
 
